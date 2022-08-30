@@ -61,7 +61,6 @@ const Registration = props => {
   const [shownPhone, setShownPhone] = useState(false);
   const [shownPassword, setShownPassword] = useState(false);
   const [shownConfirmPassword, setShownConfirmPassword] = useState(false);
-  //const [isLoading, setLoading] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState({
     isName: true,

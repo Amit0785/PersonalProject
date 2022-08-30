@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 
 const {width, height} = Dimensions.get('window');
 
@@ -15,12 +16,12 @@ const Splash = props => {
   useEffect(() => {
     setTimeout(() => {
       //props.navigation.navigate('Login');
-      check();
+      unsubscribe();
     }, 3000);
   }, []);
 
-  const check = async () => {
-    props.navigation.replace('Login');
+  const unsubscribe = async () => {
+    //props.navigation.replace('Login');
     // const token = await AsyncStorage.getItem('token');
 
     // if (token === null) {
@@ -28,6 +29,14 @@ const Splash = props => {
     // } else {
     //   props.navigation.replace('MyDrawer');
     // }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        props.navigation.replace('MyDrawer');
+      } else {
+        props.navigation.replace('Login');
+      }
+    });
   };
 
   return (

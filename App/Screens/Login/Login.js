@@ -10,13 +10,14 @@ import {
   TextInput,
   Modal,
 } from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import Hud from '../Common/Hud';
 
 import {RFValue} from 'react-native-responsive-fontsize';
 //import {base_url} from '../../Services/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 // import {
 //   AccessToken,
 //   GraphRequest,
@@ -35,6 +36,10 @@ import axios from 'axios';
 const {width, height} = Dimensions.get('window');
 
 const Login = props => {
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
   const emailRef = useRef();
   const passwordRef = useRef();
 
@@ -59,7 +64,13 @@ const Login = props => {
     {label: 'Celebrity', value: 1},
   ];
 
-  // useEffect(() => {}, []);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
   const validateEmail = value => {
     const regExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -128,54 +139,26 @@ const Login = props => {
         device_token: deviceToken,
       };
       console.log('login data==>', loginData);
-      //   await axios
-      //     .post(`${base_url}login`, loginData)
-      //     .then(async response => {
-      //       //console.log('login response Data==>', response.data.data);
-      //       console.log('token------------>', response.data.data.token);
-      //       Hud.hideHud();
 
-      //       if (response.status == 200) {
-      //         AsyncStorage.setItem('token', response.data.data.token);
-      //         AsyncStorage.setItem(
-      //           'userType',
-      //           JSON.stringify(response.data.data.user_type),
-      //         );
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          console.log('User account signed in!', userCredentials);
 
-      //         //console.log('login token=======>', response.data.data.token);
-      //         Toast.show({
-      //           type: 'success',
-      //           text1: response.data.message,
-      //         });
-      //         props.navigation.replace('MyDrawer');
-      //       } else {
-      //         console.log(response.status);
-      //       }
-      //     })
-      //     .catch(function (error) {
-      //       console.log('error==>', error);
-      //       // Request made and server responded
+          const user = userCredentials.user;
+          props.navigation.replace('MyDrawer');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+          }
 
-      //       Hud.hideHud();
-      //       if (error.response) {
-      //         console.log('response error===>', error.response.data);
-      //         var myobj = error.response.data;
-      //         var firstItem = Object.values(myobj)[0];
-      //         console.log('====>firstItem', firstItem);
-      //         console.log('====>firstItem', typeof firstItem);
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
 
-      //         Toast.show({
-      //           type: 'error',
-      //           text1: error.response.data.message,
-      //         });
-      //       } else if (error.request) {
-      //         // The request was made but no response was received
-      //         console.log('Request Error==>', error.request);
-      //       } else {
-      //         // Something happened in setting up the request that triggered an Error
-      //         console.log('Error', error.message);
-      //       }
-      //     });
+          console.error(error);
+        });
     }
   };
 
@@ -399,6 +382,44 @@ const Login = props => {
         value,
         facebookData.id,
       );
+    }
+  };
+
+  const onRegistration = async () => {
+    if (!validateEmail(email)) {
+      return setErrorMsg({...errorMsg, isValidEmail: false});
+    } else if (password.trim().length < 8) {
+      return setErrorMsg({...errorMsg, isValidPassword: false});
+    } else {
+      let deviceToken = await AsyncStorage.getItem('fcm_token');
+      //console.log('Device Token==>', deviceToken);
+      Hud.showHud();
+      const loginData = {
+        email: email,
+        password: password,
+        device_token: deviceToken,
+      };
+      console.log('login data==>', loginData);
+
+      auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          console.log('User account created & signed in!', userCredentials);
+
+          const user = userCredentials.user;
+          props.navigation.replace('MyDrawer');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
+
+          console.error(error);
+        });
     }
   };
 
@@ -754,7 +775,10 @@ const Login = props => {
             Don’t have an account?
           </Text>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('Registration')}>
+            //onPress={() => props.navigation.navigate('Registration')}
+            onPress={() => {
+              onRegistration();
+            }}>
             <Text
               style={{
                 color: '#E92D87',

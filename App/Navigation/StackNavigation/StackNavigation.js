@@ -19,7 +19,7 @@ import PleaseWait from '../../Screens/PleaseWait/PleaseWait';
 // import TermAndCondition from '../../Screens/TermAndCondition/TermAndCondition';
 // import PrivacyPolicy from '../../Screens/PrivacyPolicy/PrivacyPolicy';
 
-// import MyDrawer from '../DrawerNavigation/MyDrawer';
+import MyDrawer from '../DrawerNavigation/MyDrawer';
 
 // import IndividualChat from '../../Screens/IndividualChat/IndividualChat';
 
@@ -45,6 +45,8 @@ const StackNavigation = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
         <Stack.Screen name="PleaseWait" component={PleaseWait} />
+
+        <Stack.Screen name="MyDrawer" component={MyDrawer} />
         {/* <Stack.Screen name="Otp" component={Otp} />
 
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
@@ -54,7 +56,7 @@ const StackNavigation = () => {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
 
-        <Stack.Screen name="MyDrawer" component={MyDrawer} />
+        
         <Stack.Screen
           name="CelebrityProfilePage"
           component={CelebrityProfilePage}
