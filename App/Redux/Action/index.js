@@ -21,7 +21,7 @@ const addCake = () => {
 const buyIceCream = () => {
   return {
     type: BUY_ICECREAM,
-    info: 'First redux action',
+    info: 'First Icecream action',
   };
 };
 

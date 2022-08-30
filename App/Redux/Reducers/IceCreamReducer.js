@@ -1,5 +1,5 @@
 const initialState = {
-  numOfCakes: 10,
+  numOfIceCreams: 20,
 };
 
 const IceCreamReducer = (state = initialState, action) => {
@@ -7,13 +7,13 @@ const IceCreamReducer = (state = initialState, action) => {
     case BUY_ICECREAM:
       return {
         ...state,
-        numOfCakes: state.numOfCakes - 1,
+        numOfIceCreams: state.numOfIceCreams - 1,
       };
 
     case ADD_ICECREAM:
       return {
         ...state,
-        numOfCakes: state.numOfCakes + 1,
+        numOfIceCreams: state.numOfIceCreams + 1,
       };
 
     default:
