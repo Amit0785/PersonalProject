@@ -17,20 +17,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getApicall, postApiCall} from '../../Services/Network';
 import Hud from '../../Screens/Common/Hud';
 import Toast from 'react-native-toast-message';
+import auth from '@react-native-firebase/auth';
+
 const {width, height} = Dimensions.get('window');
 
 import {ProfileContext} from '../../Services/ProfileProvider';
 
 const CustomDrawer = props => {
-  // useEffect(() => {
-  //   //unsubscribe();
-  //   // handleProfile();
-  //   const unsubscribe = props.navigation.addListener('focus', async () => {
-  //     // handleProfile();
-  //   });
-  //   return unsubscribe;
-  // }, []);
-
   const {profileContextData} = useContext(ProfileContext);
 
   const [activeRoute, setRouteState] = useState(0);
@@ -112,12 +105,16 @@ const CustomDrawer = props => {
   };
 
   const navigateToLogout = async () => {
-    await AsyncStorage.removeItem('token');
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        props.navigation.closeDrawer();
+        props.navigation.replace('Login');
+      });
+    //await AsyncStorage.removeItem('token');
     //await AsyncStorage.removeItem('login');
     //await AsyncStorage.removeItem('profile');
-
-    props.navigation.closeDrawer();
-    props.navigation.replace('Login');
   };
 
   return (

@@ -7,7 +7,7 @@ import Splash from '../../Screens/Splash/Splash';
 import Login from '../../Screens/Login/Login';
 import Registration from '../../Screens/Registration/Registration';
 import PleaseWait from '../../Screens/PleaseWait/PleaseWait';
-// import ForgotPassword from '../../Screens/ForgotPassword/ForgotPassword';
+import ForgotPassword from '../../Screens/ForgotPassword/ForgotPassword';
 // import ForgotPasswordOtp from '../../Screens/ForgotPassword/ForgotPasswordOtp';
 // import ResetPassword from '../../Screens/ResetPassword/ResetPassword';
 
@@ -21,17 +21,17 @@ import PleaseWait from '../../Screens/PleaseWait/PleaseWait';
 
 import MyDrawer from '../DrawerNavigation/MyDrawer';
 
-// import IndividualChat from '../../Screens/IndividualChat/IndividualChat';
+import IndividualChat from '../../Screens/IndividualChat/IndividualChat';
 
 // import LiveCelebrity from '../../Screens/Live/LiveCelebrity';
-// import VideoCall from '../../Screens/VideoCall/VideoCall';
-// import OnLive from '../../Screens/Live/OnLive';
-// import CelebrityOnLive from '../../Screens/Live/CelebrityOnLive';
+import VideoCall from '../../Screens/VideoCall/VideoCall';
+import OnLive from '../../Screens/Live/OnLive';
+import CreateLive from '../../Screens/Live/CreateLive';
 // import CelebrityProfilePage from '../../Screens/CelebrityProfile/CelebrityProfilePage';
 
-// import Payment from '../../Screens/Payment/Payment';
-// import PayPalPayment from '../../Screens/Payment/PayPalPayment';
-// import StripePayment from '../../Screens/Payment/StripePayment';
+import Payment from '../../Screens/Payment/Payment';
+import PayPalPayment from '../../Screens/Payment/PayPalPayment';
+import StripePayment from '../../Screens/Payment/StripePayment';
 
 const Stack = createStackNavigator();
 
@@ -45,11 +45,20 @@ const StackNavigation = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Registration" component={Registration} />
         <Stack.Screen name="PleaseWait" component={PleaseWait} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
 
         <Stack.Screen name="MyDrawer" component={MyDrawer} />
+        <Stack.Screen name="IndividualChat" component={IndividualChat} />
+        <Stack.Screen name="VideoCall" component={VideoCall} />
+
+        <Stack.Screen name="OnLive" component={OnLive} />
+        <Stack.Screen name="CreateLive" component={CreateLive} />
+        <Stack.Screen name="Payment" component={Payment} />
+        <Stack.Screen name="PayPalPayment" component={PayPalPayment} />
+        <Stack.Screen name="StripePayment" component={StripePayment} />
         {/* <Stack.Screen name="Otp" component={Otp} />
 
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        
         <Stack.Screen name="ForgotPasswordOtp" component={ForgotPasswordOtp} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
 
@@ -62,19 +71,16 @@ const StackNavigation = () => {
           component={CelebrityProfilePage}
         />
 
-        <Stack.Screen name="IndividualChat" component={IndividualChat} />
+        
 
-        <Stack.Screen name="Payment" component={Payment} />
-        <Stack.Screen name="PayPalPayment" component={PayPalPayment} />
-        <Stack.Screen name="StripePayment" component={StripePayment} />
+        
 
         <Stack.Screen name="FAQ" component={Faq} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         <Stack.Screen name="TermAndCondition" component={TermAndCondition} />
         <Stack.Screen name="LiveCelebrity" component={LiveCelebrity} />
-        <Stack.Screen name="VideoCall" component={VideoCall} />
-        <Stack.Screen name="OnLive" component={OnLive} />
-        <Stack.Screen name="CelebrityOnLive" component={CelebrityOnLive} /> */}
+       
+        */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -20,6 +20,7 @@ import axios from 'axios';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import Hud from '../Common/Hud';
+import auth from '@react-native-firebase/auth';
 
 const {width, height} = Dimensions.get('window');
 
@@ -145,7 +146,59 @@ const Registration = props => {
       console.log('data====>', registrationData);
     }
   };
+  const onRegistration = async () => {
+    if (!validateEmail(email)) {
+      return setErrorMsg({...errorMsg, isValidEmail: false});
+    } else if (password.trim().length < 8) {
+      return setErrorMsg({...errorMsg, isValidPassword: false});
+    } else {
+      let deviceToken = await AsyncStorage.getItem('fcm_token');
+      //console.log('Device Token==>', deviceToken);
+      Hud.showHud();
 
+      auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          console.log('User account created & signed in!', userCredentials);
+
+          const user = userCredentials.user;
+          props.navigation.replace('MyDrawer');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
+
+          console.error(error);
+        });
+
+      try {
+        const result = await auth().createUserWithEmailAndPassword(
+          email,
+          password,
+        );
+        firestore()
+          .collection('users')
+          .doc(result.user.uid)
+          .set({
+            name: name,
+            userName: userName,
+            email: result.user.email,
+            uid: result.user.uid,
+            status: 'online',
+            user_type: value + 1,
+            mobile_number: phone,
+          });
+        Hud.hideHud();
+      } catch (err) {
+        alert('something went wrong');
+      }
+    }
+  };
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: '#FFFFFF', alignItems: 'center'}}>

@@ -16,7 +16,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import {RFValue} from 'react-native-responsive-fontsize';
 import Hud from '../../Screens/Common/Hud';
 import Toast from 'react-native-toast-message';
-import {base_url} from '../../Services/constants';
+//import {base_url} from '../../Services/constants';
 
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
@@ -24,34 +24,18 @@ import {v4 as uuid} from 'uuid';
 const {width, height} = Dimensions.get('window');
 
 const BottomTab = props => {
-  useEffect(() => {
-    handleUserType();
-    handleProfile();
-  }, []);
-
   //const refRBSheet = useRef();
   // const [data, setData] = useState([]);
   // const [activeRoute, setRouteState] = useState(0);
   const setRoute = (pageName, index) => {
     props.navigation.jumpTo(pageName);
-    //setRouteState(index);
   };
 
   const [video, setVideo] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState('');
   const [profile, setProfile] = useState([]);
-  const handleUserType = async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('userType')));
-    // console.log('profile===>', user);
-    // console.log('type====>', typeof user);
-  };
 
-  const handleProfile = async () => {
-    setProfile(JSON.parse(await AsyncStorage.getItem('profile')));
-    console.log('profile===>', profile);
-    // console.log('type====>', typeof user);
-  };
   const walletTab = async () => {
     if (user === 1) {
       //console.log('User===>', data.user_type);
@@ -189,7 +173,7 @@ const BottomTab = props => {
   const onLive = async () => {
     console.log('Live Function Enter here');
     setShowModal(false);
-    props.navigation.navigate('LiveCelebrity', {data: profile});
+    props.navigation.navigate('CreateLive');
   };
 
   return (
@@ -410,41 +394,39 @@ const BottomTab = props => {
                 </Text>
               </TouchableOpacity>
 
-              {user === 2 ? (
-                <TouchableOpacity
-                  onPress={() => onLive()}
-                  style={styles.refDivision}>
+              <TouchableOpacity
+                onPress={() => onLive()}
+                style={styles.refDivision}>
+                <View
+                  style={{
+                    height: 50,
+                    width: 50,
+                    backgroundColor: 'rgba(225,225,225,0.5)',
+                    // backgroundColor: '#E92D87',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 100,
+                  }}>
                   <View
                     style={{
-                      height: 50,
-                      width: 50,
-                      backgroundColor: 'rgba(225,225,225,0.5)',
-                      // backgroundColor: '#E92D87',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 100,
+                      height: 15,
+                      width: 25,
+                      //marginRight: 3
                     }}>
-                    <View
+                    <Image
+                      source={require('../../Assets/Icon/live.jpg')}
                       style={{
-                        height: 15,
-                        width: 25,
-                        //marginRight: 3
-                      }}>
-                      <Image
-                        source={require('../../Assets/Icon/live.jpg')}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          tintColor: '#000',
-                        }}
-                        resizeMode="cover"
-                      />
-                    </View>
+                        width: '100%',
+                        height: '100%',
+                        tintColor: '#000',
+                      }}
+                      resizeMode="cover"
+                    />
                   </View>
+                </View>
 
-                  <Text style={styles.rawTextStyle}>Go Live</Text>
-                </TouchableOpacity>
-              ) : null}
+                <Text style={styles.rawTextStyle}>Go Live</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>

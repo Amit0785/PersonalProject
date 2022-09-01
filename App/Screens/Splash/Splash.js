@@ -6,32 +6,32 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import {ProfileContext} from '../../Services/ProfileProvider';
 
 const {width, height} = Dimensions.get('window');
 
 const Splash = props => {
+  const {setProfileContextData, setnotificationStatusContextData} =
+    useContext(ProfileContext);
+
   useEffect(() => {
     setTimeout(() => {
       //props.navigation.navigate('Login');
-      unsubscribe();
+      subscribe();
     }, 3000);
   }, []);
 
-  const unsubscribe = async () => {
-    //props.navigation.replace('Login');
-    // const token = await AsyncStorage.getItem('token');
-
-    // if (token === null) {
-    //   props.navigation.replace('Login');
-    // } else {
-    //   props.navigation.replace('MyDrawer');
-    // }
-
-    auth.onAuthStateChanged(user => {
-      if (user) {
+  const subscribe = async () => {
+    auth.onAuthStateChanged(userExist => {
+      if (userExist) {
+        console.log('userValue===>', userExist);
+        firestore().collection('users').doc(userExist.uid).update({
+          status: 'online',
+        });
+        setProfileContextData(userExist);
         props.navigation.replace('MyDrawer');
       } else {
         props.navigation.replace('Login');
@@ -61,14 +61,6 @@ const Splash = props => {
         />
       </View>
     </SafeAreaView>
-
-    // <SafeAreaView style={{flex:1,}}>
-
-    // <Image style={{height:height,width:width,}}
-    //     source={require('../../Assets/Icon/splash.jpg')}
-    // />
-
-    // </SafeAreaView>
   );
 };
 
